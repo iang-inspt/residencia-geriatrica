@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Formulario de asignación | Residencia Geriátrica</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<header class="barra-superior">
+    <div class="contenedor barra-contenido">
+        <h2>Residencia Geriátrica</h2>
+        <a th:href="@{/asignaciones}">Volver a asignaciones</a>
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <div class="encabezado-seccion">
+        <div>
+            <h1 th:text="${edicion} ? 'Cambiar enfermero' : 'Nueva asignación'">
+                Asignación
+            </h1>
+
+            <p>Seleccioná la habitación y el enfermero responsable.</p>
+        </div>
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="mensaje error"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <div class="tarjeta formulario-contenedor">
+
+        <form th:action="${edicion} ? @{/asignaciones/actualizar/{codigo}(codigo=${habitacion.codigo})} : @{/asignaciones/guardar}"
+              method="post">
+
+            <!-- NUEVA ASIGNACION: SELECCIONAR HABITACION -->
+            <div class="campo" th:if="${!edicion}">
+
+                <label for="codigo">Habitación sin enfermero</label>
+
+                <select id="codigo" name="codigo"
+                        th:required="${!edicion}">
+
+                    <option value="">Seleccionar habitación</option>
+
+                    <option th:each="h : ${habitaciones}"
+                            th:value="${h.codigo}"
+                            th:text="${'Habitación ' + h.codigo}">
+                    </option>
+
+                </select>
+            </div>
+
+            <!-- EDICION: MOSTRAR HABITACION ACTUAL -->
+            <div class="campo" th:if="${edicion}">
+
+                <label>Habitación</label>
+
+                <p class="dato-lectura"
+                   th:text="${'Habitación ' + habitacion.codigo}">
+                </p>
+
+                <label>Enfermero actual</label>
+
+                <p class="dato-lectura"
+                   th:text="${habitacion.enfermero.nombre + ' ' + habitacion.enfermero.apellido}">
+                </p>
+            </div>
+
+            <!-- SELECCIONAR ENFERMERO -->
+            <div class="campo">
+
+                <label for="enfermeroId"
+                       th:text="${edicion} ? 'Nuevo enfermero' : 'Enfermero responsable'">
+                    Enfermero
+                </label>
+
+                <select id="enfermeroId"
+                        name="enfermeroId"
+                        required>
+
+                    <option value="">Seleccionar enfermero</option>
+
+                    <option th:each="e : ${enfermeros}"
+                            th:value="${e.id}"
+                            th:text="${e.nombre + ' ' + e.apellido + ' - DNI: ' + e.dni}"
+                            th:disabled="${edicion and habitacion.enfermero.id == e.id}">
+                    </option>
+
+                </select>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="acciones-formulario">
+
+                <button class="boton boton-primario"
+                        type="submit"
+                        th:disabled="${#lists.isEmpty(enfermeros) or (!edicion and #lists.isEmpty(habitaciones))}">
+                    <span th:text="${edicion} ? 'Guardar cambio' : 'Confirmar asignación'">
+                        Confirmar
+                    </span>
+                </button>
+
+                <a class="boton boton-secundario"
+                   th:href="@{/asignaciones}">
+                    Cancelar
+                </a>
+            </div>
+
+        </form>
+
+        <p th:if="${!edicion and #lists.isEmpty(habitaciones)}"
+           class="texto-secundario">
+            No hay habitaciones disponibles para asignar.
+        </p>
+
+        <p th:if="${#lists.isEmpty(enfermeros)}"
+           class="texto-secundario">
+            No hay enfermeros registrados.
+        </p>
+
+    </div>
+
+</main>
+
+</body>
+</html>

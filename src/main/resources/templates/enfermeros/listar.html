@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Enfermeros | Residencia Geriátrica</title>
+
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<header class="barra-superior">
+    <div class="contenedor barra-contenido">
+        <h2>Residencia Geriátrica</h2>
+        <a th:href="@{/}">Menú principal</a>
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <div class="encabezado-seccion">
+        <div>
+            <h1>Gestión de enfermeros</h1>
+            <p>Administración del personal de enfermería.</p>
+        </div>
+
+        <a class="boton boton-primario"
+           th:href="@{/enfermeros/nuevo}">
+            + Nuevo enfermero
+        </a>
+    </div>
+
+    <div class="mensaje exito"
+         th:if="${mensaje}"
+         th:text="${mensaje}">
+    </div>
+
+    <div class="mensaje error"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <div class="tarjeta">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>DNI</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr th:each="enfermero : ${enfermeros}">
+
+                    <td th:text="${enfermero.id}"></td>
+                    <td th:text="${enfermero.dni}"></td>
+                    <td th:text="${enfermero.nombre}"></td>
+                    <td th:text="${enfermero.apellido}"></td>
+
+                    <td>
+                        <div class="acciones">
+
+                            <a class="boton boton-secundario"
+                               th:href="@{/enfermeros/editar/{id}(id=${enfermero.id})}">
+                                Editar
+                            </a>
+
+                            <form th:action="@{/enfermeros/eliminar/{id}(id=${enfermero.id})}"
+                                  method="post"
+                                  onsubmit="return confirm('¿Eliminar este enfermero?');">
+
+                                <button class="boton boton-peligro"
+                                        type="submit">
+                                    Eliminar
+                                </button>
+
+                            </form>
+
+                        </div>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(enfermeros)}">
+                    <td colspan="5" class="tabla-vacia">
+                        No hay enfermeros registrados.
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+    </div>
+
+</main>
+
+</body>
+</html>

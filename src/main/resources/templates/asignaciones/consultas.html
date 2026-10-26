@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Consultas | Residencia Geriátrica</title>
+
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<header class="barra-superior">
+    <div class="contenedor barra-contenido">
+        <h2>Residencia Geriátrica</h2>
+        <a th:href="@{/asignaciones}">Volver a asignaciones</a>
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <div class="encabezado-seccion">
+        <div>
+            <h1>Consultas de asignaciones</h1>
+            <p>Relaciones entre enfermeros, residentes y habitaciones.</p>
+        </div>
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="mensaje error"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <!-- CONSULTA 1 -->
+    <div class="tarjeta seccion-consulta">
+
+        <h2>Residentes atendidos por un enfermero</h2>
+
+        <p class="texto-secundario">
+            Seleccioná un enfermero para consultar los residentes
+            alojados en las habitaciones que tiene asignadas.
+        </p>
+
+        <form th:action="@{/asignaciones/consultas/enfermero}"
+              method="get">
+
+            <div class="campo">
+                <label for="enfermeroId">Enfermero</label>
+
+                <select id="enfermeroId" name="id" required>
+
+                    <option value="">Seleccionar enfermero</option>
+
+                    <option th:each="e : ${enfermeros}"
+                            th:value="${e.id}"
+                            th:text="${e.nombre + ' ' + e.apellido + ' - DNI: ' + e.dni}"
+                            th:selected="${enfermero != null and enfermero.id == e.id}">
+                    </option>
+
+                </select>
+            </div>
+
+            <button class="boton boton-primario" type="submit">
+                Consultar residentes
+            </button>
+
+        </form>
+
+        <!-- RESULTADOS CONSULTA 1 -->
+        <div th:if="${enfermero != null}" class="resultado-consulta">
+
+            <h3>
+                Residentes atendidos por
+                <span th:text="${enfermero.nombre + ' ' + enfermero.apellido}"></span>
+            </h3>
+
+            <table th:if="${!#lists.isEmpty(residentesAtendidos)}">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>DNI</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr th:each="r : ${residentesAtendidos}">
+                        <td th:text="${r.id}"></td>
+                        <td th:text="${r.dni}"></td>
+                        <td th:text="${r.nombre}"></td>
+                        <td th:text="${r.apellido}"></td>
+                    </tr>
+                </tbody>
+
+            </table>
+
+            <p th:if="${#lists.isEmpty(residentesAtendidos)}">
+                Este enfermero no tiene residentes a su cargo.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- CONSULTA 2 -->
+    <div class="tarjeta seccion-consulta">
+
+        <h2>Enfermero responsable de un residente</h2>
+
+        <p class="texto-secundario">
+            Seleccioná un residente para consultar el enfermero
+            responsable de su habitación.
+        </p>
+
+        <form th:action="@{/asignaciones/consultas/residente}"
+              method="get">
+
+            <div class="campo">
+                <label for="residenteId">Residente</label>
+
+                <select id="residenteId" name="id" required>
+
+                    <option value="">Seleccionar residente</option>
+
+                    <option th:each="r : ${residentes}"
+                            th:value="${r.id}"
+                            th:text="${r.nombre + ' ' + r.apellido + ' - DNI: ' + r.dni}"
+                            th:selected="${residenteConsultado != null and residenteConsultado.id == r.id}">
+                    </option>
+
+                </select>
+            </div>
+
+            <button class="boton boton-primario" type="submit">
+                Consultar enfermero
+            </button>
+
+        </form>
+
+        <!-- RESULTADOS CONSULTA 2 -->
+        <div th:if="${enfermeroResponsable != null}"
+             class="resultado-consulta">
+
+            <h3>Resultado de la consulta</h3>
+
+            <p>
+                <strong>Residente:</strong>
+                <span th:text="${residenteConsultado.nombre + ' ' + residenteConsultado.apellido}"></span>
+            </p>
+
+            <p>
+                <strong>Enfermero responsable:</strong>
+                <span th:text="${enfermeroResponsable.nombre + ' ' + enfermeroResponsable.apellido}"></span>
+            </p>
+
+            <p>
+                <strong>DNI del enfermero:</strong>
+                <span th:text="${enfermeroResponsable.dni}"></span>
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

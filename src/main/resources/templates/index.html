@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Residencia Geriátrica</title>
+
+        <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    </head>
+
+    <body>
+
+        <header class="barra-superior">
+            <div class="contenedor barra-contenido">
+                <h2>Residencia Geriátrica</h2>
+                <span>Panel administrativo</span>
+            </div>
+        </header>
+
+        <main class="contenedor">
+
+            <div class="encabezado-seccion">
+                <div>
+                    <h1>Panel de administración</h1>
+                    <p>Seleccione el módulo que desea administrar.</p>
+                </div>
+            </div>
+
+            <div class="menu-grid">
+
+                <a class="menu-tarjeta" th:href="@{/residentes}">
+                    <h3>Residentes</h3>
+                    <p>Alta, modificación, consulta y baja de residentes.</p>
+                </a>
+
+                <a class="menu-tarjeta" th:href="@{/enfermeros}">
+                    <h3>Enfermeros</h3>
+                    <p>Administración del personal de enfermería.</p>
+                </a>
+
+                <a class="menu-tarjeta" th:href="@{/habitaciones}">
+                    <h3>Habitaciones</h3>
+                    <p>Administración y consulta de habitaciones.</p>
+                </a>
+
+                <a class="menu-tarjeta" th:href="@{/reservas}">
+                    <h3>Reservas</h3>
+                    <p>Asignación de residentes a habitaciones.</p>
+                </a>
+
+                <a class="menu-tarjeta" th:href="@{/asignaciones}">
+                    <h3>Asignaciones</h3>
+                    <p>Administración de enfermeros responsables de habitaciones.</p>
+                </a>
+
+            </div>
+
+        </main>
+
+    </body>
+</html>

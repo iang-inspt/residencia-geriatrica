@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Nueva reserva | Residencia Geriátrica</title>
+
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<header class="barra-superior">
+    <div class="contenedor barra-contenido">
+
+        <h2>Residencia Geriátrica</h2>
+
+        <a th:href="@{/reservas}">
+            Volver a reservas
+        </a>
+
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <div class="encabezado-seccion">
+        <div>
+            <h1>Nueva reserva</h1>
+            <p>Asignar un residente a una habitación disponible.</p>
+        </div>
+    </div>
+
+    <!-- MENSAJES DE ERROR -->
+    <div class="mensaje error"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <div class="tarjeta formulario-contenedor">
+
+        <form th:action="@{/reservas/guardar}" method="post">
+
+            <!-- SELECCIONAR HABITACION -->
+            <div class="campo">
+
+                <label for="codigo">Habitación disponible</label>
+
+                <select id="codigo" name="codigo" required>
+
+                    <option value="">
+                        Seleccionar habitación
+                    </option>
+
+                    <option th:each="habitacion : ${habitaciones}"
+                            th:value="${habitacion.codigo}"
+                            th:text="${'Habitación ' + habitacion.codigo}">
+                    </option>
+
+                </select>
+
+            </div>
+
+            <!-- SELECCIONAR RESIDENTE -->
+            <div class="campo">
+
+                <label for="residenteId">Residente</label>
+
+                <select id="residenteId" name="residenteId" required>
+
+                    <option value="">
+                        Seleccionar residente
+                    </option>
+
+                    <option th:each="residente : ${residentes}"
+                            th:value="${residente.id}"
+                            th:text="${residente.nombre + ' ' + residente.apellido + ' - DNI: ' + residente.dni}">
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="acciones-formulario">
+
+                <button class="boton boton-primario"
+                        type="submit"
+                        th:disabled="${#lists.isEmpty(habitaciones) or #lists.isEmpty(residentes)}">
+                    Confirmar reserva
+                </button>
+
+                <a class="boton boton-secundario"
+                   th:href="@{/reservas}">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+        <p th:if="${#lists.isEmpty(habitaciones)}">
+            No hay habitaciones disponibles.
+        </p>
+
+        <p th:if="${#lists.isEmpty(residentes)}">
+            No hay residentes disponibles para asignar.
+        </p>
+
+    </div>
+
+</main>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Formulario de residente</title>
+
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<header class="barra-superior">
+    <div class="contenedor barra-contenido">
+        <h2>Residencia Geriátrica</h2>
+        <a th:href="@{/residentes}">Volver a residentes</a>
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <div class="encabezado-seccion">
+        <div>
+            <h1 th:text="${edicion} ? 'Modificar residente' : 'Nuevo residente'">
+                Residente
+            </h1>
+
+            <p>Completá los datos del residente.</p>
+        </div>
+    </div>
+
+    <div class="mensaje error"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <div class="tarjeta formulario-contenedor">
+
+        <form th:object="${residente}"
+              th:action="${edicion} ? @{/residentes/actualizar/{id}(id=${residente.id})} : @{/residentes/guardar}"
+              method="post">
+
+            <div class="campo">
+                <label for="dni">DNI</label>
+
+                <input type="number"
+                       id="dni"
+                       name="dni"
+                       th:field="*{dni}"
+                       min="1"
+                       required>
+            </div>
+
+            <div class="campo">
+                <label for="nombre">Nombre</label>
+
+                <input type="text"
+                       id="nombre"
+                       name="nombre"
+                       th:field="*{nombre}"
+                       maxlength="100"
+                       required>
+            </div>
+
+            <div class="campo">
+                <label for="apellido">Apellido</label>
+
+                <input type="text"
+                       id="apellido"
+                       name="apellido"
+                       th:field="*{apellido}"
+                       maxlength="100"
+                       required>
+            </div>
+
+            <div class="acciones-formulario">
+
+                <button class="boton boton-primario"
+                        type="submit">
+                    Guardar
+                </button>
+
+                <a class="boton boton-secundario"
+                   th:href="@{/residentes}">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+</body>
+</html>

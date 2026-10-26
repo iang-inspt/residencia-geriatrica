@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Detalle de habitación</title>
+
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<header class="barra-superior">
+    <div class="contenedor barra-contenido">
+
+        <h2>Residencia Geriátrica</h2>
+
+        <a th:href="@{/habitaciones}">
+            Volver a habitaciones
+        </a>
+
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <div class="encabezado-seccion">
+        <div>
+            <h1>
+                Habitación
+                <span th:text="${habitacion.codigo}"></span>
+            </h1>
+
+            <p>Información y relaciones de la habitación.</p>
+        </div>
+    </div>
+
+    <div class="tarjeta formulario-contenedor">
+
+        <h2>Información general</h2>
+
+        <p>
+            <strong>Código:</strong>
+            <span th:text="${habitacion.codigo}"></span>
+        </p>
+
+        <p>
+            <strong>Estado:</strong>
+
+            <span class="estado"
+                  th:classappend="${habitacion.estado.name() == 'LIBRE'} ? 'estado-libre' : 'estado-ocupada'"
+                  th:text="${habitacion.estado}">
+            </span>
+        </p>
+
+        <hr>
+
+        <h2>Residente asignado</h2>
+
+        <div th:if="${habitacion.residente != null}">
+
+            <p>
+                <strong>Nombre:</strong>
+                <span th:text="${habitacion.residente.nombre + ' ' + habitacion.residente.apellido}"></span>
+            </p>
+
+            <p>
+                <strong>DNI:</strong>
+                <span th:text="${habitacion.residente.dni}"></span>
+            </p>
+
+        </div>
+
+        <p th:if="${habitacion.residente == null}">
+            Esta habitación no tiene residente asignado.
+        </p>
+
+        <hr>
+
+        <h2>Enfermero asignado</h2>
+
+        <div th:if="${habitacion.enfermero != null}">
+
+            <p>
+                <strong>Nombre:</strong>
+                <span th:text="${habitacion.enfermero.nombre + ' ' + habitacion.enfermero.apellido}"></span>
+            </p>
+
+            <p>
+                <strong>DNI:</strong>
+                <span th:text="${habitacion.enfermero.dni}"></span>
+            </p>
+
+        </div>
+
+        <p th:if="${habitacion.enfermero == null}">
+            Esta habitación no tiene enfermero asignado.
+        </p>
+
+        <div class="acciones-formulario">
+
+            <a class="boton boton-secundario"
+               th:href="@{/habitaciones}">
+                Volver al listado
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+</body>
+</html>

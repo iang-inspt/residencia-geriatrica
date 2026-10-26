@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Asignaciones | Residencia Geriátrica</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+
+<body>
+
+<header class="barra-superior">
+    <div class="contenedor barra-contenido">
+        <h2>Residencia Geriátrica</h2>
+        <a th:href="@{/}">Menú principal</a>
+    </div>
+</header>
+
+<main class="contenedor">
+
+    <div class="encabezado-seccion">
+        <div>
+            <h1>Gestión de asignaciones</h1>
+            <p>Administración de enfermeros responsables de habitaciones.</p>
+        </div>
+
+        <div class="acciones">
+            <a class="boton boton-secundario"
+               th:href="@{/asignaciones/consultas}">
+                Consultas
+            </a>
+
+            <a class="boton boton-primario"
+               th:href="@{/asignaciones/nueva}">
+                + Nueva asignación
+            </a>
+        </div>
+    </div>
+
+    <!-- MENSAJES -->
+    <div class="mensaje exito"
+         th:if="${mensaje}"
+         th:text="${mensaje}">
+    </div>
+
+    <div class="mensaje error"
+         th:if="${error}"
+         th:text="${error}">
+    </div>
+
+    <!-- LISTADO -->
+    <div class="tarjeta">
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Habitación</th>
+                    <th>Estado</th>
+                    <th>Enfermero asignado</th>
+                    <th>Residente</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="habitacion : ${habitaciones}">
+
+                    <td th:text="${habitacion.codigo}"></td>
+
+                    <td>
+                        <span class="estado"
+                              th:classappend="${habitacion.estado.name() == 'LIBRE'} ? 'estado-libre' : 'estado-ocupada'"
+                              th:text="${habitacion.estado}">
+                        </span>
+                    </td>
+
+                    <!-- ENFERMERO -->
+                    <td>
+                        <span th:if="${habitacion.enfermero != null}"
+                              th:text="${habitacion.enfermero.nombre + ' ' + habitacion.enfermero.apellido}">
+                        </span>
+
+                        <span th:if="${habitacion.enfermero == null}"
+                              class="texto-secundario">
+                            Sin enfermero
+                        </span>
+                    </td>
+
+                    <!-- RESIDENTE -->
+                    <td>
+                        <span th:if="${habitacion.residente != null}"
+                              th:text="${habitacion.residente.nombre + ' ' + habitacion.residente.apellido}">
+                        </span>
+
+                        <span th:if="${habitacion.residente == null}"
+                              class="texto-secundario">
+                            Sin residente
+                        </span>
+                    </td>
+
+                    <!-- ACCIONES -->
+                    <td>
+                        <div class="acciones">
+
+                            <!-- HABITACION CON ENFERMERO -->
+                            <th:block th:if="${habitacion.enfermero != null}">
+
+                                <a class="boton boton-secundario"
+                                   th:href="@{/asignaciones/cambiar/{codigo}(codigo=${habitacion.codigo})}">
+                                    Cambiar
+                                </a>
+
+                                <form th:action="@{/asignaciones/eliminar/{codigo}(codigo=${habitacion.codigo})}"
+                                      method="post"
+                                      onsubmit="return confirm('¿Desasignar al enfermero de esta habitación?');">
+
+                                    <button class="boton boton-peligro"
+                                            type="submit">
+                                        Desasignar
+                                    </button>
+                                </form>
+
+                            </th:block>
+
+                            <!-- HABITACION SIN ENFERMERO -->
+                            <a th:if="${habitacion.enfermero == null}"
+                               class="boton boton-primario"
+                               th:href="@{/asignaciones/nueva}">
+                                Asignar
+                            </a>
+
+                        </div>
+                    </td>
+                </tr>
+
+                <tr th:if="${#lists.isEmpty(habitaciones)}">
+                    <td colspan="5" class="tabla-vacia">
+                        No hay habitaciones registradas.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</main>
+
+</body>
+</html>
